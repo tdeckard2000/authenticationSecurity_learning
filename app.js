@@ -2,10 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
+const encrypt = require('mongoose-encryption');
+require('dotenv').config(); 
 //bcrypt
 
 const app = express();
-
+console.log(process.env.SESSION_SECRET)
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
@@ -16,6 +18,8 @@ mongoose.connect('mongodb://127.0.0.1/secrets', {useNewUrlParser: true, useUnifi
         console.log(error);
     };
 });
+
+// userSchema.plugin(encrypt, {encryptionKey: encKey, signingKey: sigKey, encryptedFields: ['password']});
 
 // Mongoose Schemas ========================================================
 const userSchema = new mongoose.Schema({
@@ -115,3 +119,4 @@ app.post('/login', async (req, res)=>{
 app.listen(3000, ()=>{
     console.log("localhost:3000");
 });
+
